@@ -1,0 +1,391 @@
+
+
+[07:27 - 07:43] What does OLS stand for? Sorry? What does OLS stand for? The Ordinary Least Squares. And what are the assumptions of Ordinary Least Squares? First of all, it should deal with the continuous outcomes, and then also it approximates a number distribution.
+
+[07:43 - 07:53] That's what I was trying to show for the second graph, and from my statistical summary,
+
+[07:53 - 08:10] I'm showing that if you look at the variance and the mean. So first of all, the variance is 0.103, and then the mean is 0.0458.
+
+[08:10 - 08:21] And also, it gives the variance to mean ratio. It's around 2.25. Then also, the zero months I have are quite big.
+
+[08:21 - 08:37] So this shows a very over-dispersion for my data. And also, when I look at the congressional documents, it is right skewed.
+
+[08:37 - 08:48] I think I noted that down. So with that, my congressional listing document, it's violating the assumptions for the OLS.
+
+[08:48 - 09:03] So then this now pushes us to move on to the GLM methods. So for that slide, I'm trying to show that we couldn't succeed with the OLS based on our data,
+
+[09:03 - 09:15] and then we try to find out a solution with the GLMs in the next slide. So moving on to the GLM.
+
+[09:15 - 09:25] So the first baseline we started with is the Poisson regression. Now, based on our data, the Poisson might show some improvement.
+
+[09:25 - 09:39] However, the Poisson is having an assumption that the variance should be equal to the mean, which is not the case for our data. We've already seen above that the variance to the mean ratio is 2.25.
+
+[09:39 - 09:53] So still that assumption for the Poisson was violated. So then, having Poisson's done, the baseline, so we moved on to the QASY Poisson regression.
+
+[09:53 - 10:04] So for the QASY Poisson regression, this still keeps the Poisson mean structure. The equation is still the same, but then it brings in a dispersion parameter.
+
+[10:04 - 10:15] So the dispersion parameter tries to relax the strict equality between the mean and the variance for the Poisson.
+
+[10:15 - 10:32] So with a dispersion parameter here, I try to calculate it, and it gives a 2.5. Yes, so which means that the variance is about around two and a half times the standard Poisson model expects.
+
+[10:32 - 10:49] Yes, so the QASY might help, but then still, okay, it helps to acknowledge the over-dispersion, but it doesn't fully deal with the underlying count distribution for the zeros that we have.
+
+[10:49 - 10:59] So that is the issue for the QASY. Yes, so that is what I... It doesn't deal with what? Sorry? What doesn't it deal with?
+
+[10:59 - 11:10] The underlying issue we have for the count distribution for the zeros. So it doesn't deal with zero inflation. Yes, zero inflation.
+
+[11:10 - 11:20] However, it tries to bring in the dispersion parameter. Then I try to look out for the negative binomial.
+
+[11:20 - 11:38] So the negative binomial still is also extending the Poisson distribution by still adding another dispersion parameter. Now, for the negative binomial, the dispersion parameter it brings in, it allows the variance to be greater than the mean.
+
+[11:38 - 11:48] So it uses a quadratic variance function that would help or be better to fit the data with the extreme counts.
+
+[11:48 - 11:59] So with my analysis with that, I also try to compare the three, the Poisson, the QASY Poisson, and then the negative binomial.
+
+[11:59 - 12:10] So I'm trying to compare the variances to the actual variance. Yes. So if I'm comparing the models, how they handle the variance.
+
+[12:11 - 12:25] So the overall mean, the Poisson underestimates the observed variance. Then the QASY Poisson slightly overshoots. Then the negative binomial, it's quite close to the actual variance in the data.
+
+[12:25 - 12:44] It's further than the QASY Poisson, though. Sorry? The negative binomial is 0.021 away from the actual, and the QASY Poisson is 0.012.
+
+[12:44 - 13:00] Yeah. So which do you think is the better choice between those two? Would the negative binomial be better because it's trying to be close?
+
+[13:00 - 13:14] But it's further away. It's further away. Oh, really? If I subtract 0.103 from 0.115, I get 0.012.
+
+[13:14 - 13:25] If I subtract 0.082 from 0.103, I get something, 0.21. Yeah, sure, it's further away.
+
+[13:26 - 13:36] Hmm. So by that criteria, the QASY Poisson seems like it does better than the negative binomial. Yeah, better than the negative binomial.
+
+[13:36 - 13:51] Yeah, that's right. Neither of them deal with the structural zeros, but just based on the logic you're laying out so far, it would seem to me,
+
+[13:51 - 14:04] if I had gone through those three options, I would have thought that the QASY Poisson would have been the choice. Yeah, I think you're right, because also, if you look at the parameter,
+
+[14:05 - 14:19] the variance is equal to mu plus mu squared out of theta. So if, I think I had done a calculation somewhere, and I didn't include it.
+
+[14:21 - 14:33] I didn't include the theta. Because if the condition that the theta is tending to infinity, then the variance would tend to mu, which still comes to Poisson.
+
+[14:34 - 14:46] Then when the theta gets to 0, the variance will be greater than mu. I think I didn't calculate the theta. Yeah, I think QASY Poisson is better here.
+
+[14:48 - 14:58] It's better here. It looks like you estimated that theta is 0.058. Yeah, yeah, yeah. Did I include it here? Yeah.
+
+[14:58 - 15:14] Yes, I did, yeah. And this is, and that is small. So if it is small, then mu will still be bigger.
+
+[15:15 - 15:35] When theta is small, variance is still larger than mu. Yeah, it's still larger, yeah. It's still larger. So it's larger than mu. But which of those two, so your empirical test doesn't suggest negative binomial.
+
+[15:36 - 15:53] Yes. Based on the way you set up this empirical test. This is one way you might have done it. It's not the only way. It's not the only way. Are there structural qualities of a quasi-Poisson versus a negative binomial model
+
+[15:53 - 16:03] that make one choice more logical than the other? So when you said ordinary least squares expect continuous outcomes and these sorts of things,
+
+[16:03 - 16:13] and Poisson expects equal mean and variance, those were good reasons to dismiss those two. Even if they did really, really well, they are wrong.
+
+[16:14 - 16:28] Are there similar reasons, or are there ways to think through the quasi-Poisson versus the negative binomial that would say, well, the quasi-Poisson does a better job of estimating this particular version of variance,
+
+[16:28 - 16:39] but it's actually still misspecified. I think one of the reasons I would give would be to the parameters, the dispersion parameters they have.
+
+[16:39 - 16:59] So if you look at the quasi-Poisson, when I calculated the dispersion parameter, it's 2.5. So 2.5, meaning the variance is 2.5 times what the Poisson assumes.
+
+[17:00 - 17:11] So here, we have violated the case that the mean will be equal to... Sorry. That's the point of the quasi-Poisson.
+
+[17:13 - 17:24] So we estimate a Poisson regression with one parameter, lambda. But to be able to do that, we have to assume that the variance is equal to the mean.
+
+[17:24 - 17:34] Quasi-Poisson doesn't require that anymore, but you have to estimate another parameter. Which is 2.5. Sure. Yes.
+
+[17:34 - 17:46] What difference does that make? Why do I care? Yes. But again, because I'm trying to compare the quasi and the negative binomial, so if the quasi gives us mean is equal to...
+
+[17:47 - 17:59] Sorry, the variance is 2.5. Yes. Then when I come to the negative binomial, to the negative binomial now, the variance is going to be quite larger.
+
+[18:00 - 18:11] So comparing the variance of quasi to negative binomial, negative binomial still gives us a larger... Wow.
+
+[18:12 - 18:28] Okay, yes, based on the parameter I got for theta, because theta is small. They're completely different. Yes. So here, this phi is a dispersion parameter in a quasi-Poisson likelihood.
+
+[18:30 - 18:40] Theta here is actually an over-dispersion parameter in a negative binomial likelihood. You can't compare those two numbers together. They're trying to shape the likelihood slightly different.
+
+[18:40 - 18:54] The negative binomial model is a completely different likelihood than a quasi-Poisson. That's it. Phi and theta are nuisance parameters that we have to estimate
+
+[18:54 - 19:04] to try and get the mean and the predictions from the model to work correctly, but they work through a different pathway in the likelihood.
+
+[19:04 - 19:14] So phi of 2.5 and the theta of 0.058 are actually pretty consistent. Okay.
+
+[19:14 - 19:28] It's the idea that when you look at phi and it's that big, you've got some over-dispersion, and when you look at theta and it's that small, you also have over-dispersion. The model is trying to correct for those things based on what it estimates those to be,
+
+[19:28 - 19:38] but they're not directly comparable. Comparable, okay. I see. Variance, yes, comparable.
+
+[19:38 - 19:48] Means, yes, comparable. These additional distributional parameters operate on different scales because of the way the likelihood is specified,
+
+[19:48 - 19:58] and so they don't really end up being comparable. You could verify that for yourself by simulating a bunch of data
+
+[19:58 - 20:11] where you know what the dispersion is, and you fit these models to them. If you thought they were exactly the same, then you should get the same phi and theta,
+
+[20:11 - 20:22] but you will not. You will not yet. I don't think so. Okay. It would be very surprising to me for you to get that. So let me just hold on one second.
+
+[20:22 - 20:50] Let's just look at this. So they use a quasi-likelihood to estimate what these values are
+
+[20:50 - 21:02] because we don't actually have a discrete probability distribution, right? A discrete probability. So this is just to give you a sense. Here's what the maximum likelihood is trying to figure out.
+
+[21:02 - 21:13] Yeah. Okay.
+
+[21:22 - 21:32] So you can see, I think here they're using r for theta. This might be...
+
+[21:38 - 21:57] Yeah, so here r is... on this. So they're just on different scales, right? They aren't going to look the same
+
+[21:57 - 22:09] because they're working through the equation in a completely different way. Professor, I have a question. So when we get to that slide of negative binomial, looking
+
+[22:09 - 22:29] at that table here, so the formula, so Poisson assumes variance is equal to mean, which we don't have in our data. Then quasi-variance is equal to 2.5 times the mean. Then the negative
+
+[22:29 - 22:48] binomial, the variance is mu plus mu squared. I assume if our theta in negative binomial is 0.058, then I don't know what the mu is, but the mu will still be bigger. So... You set mu here. I set mu?
+
+[22:48 - 23:16] 0.046. Okay. Okay, 0.046, then plus 0.046 squared. Let me see. This is 0.48116. Okay, so
+
+[23:16 - 23:37] I'm thinking quasi would be better based on how our data is, because our data at first I explained that the ratio of variance to mean is 2.25. This 2.5, though, is estimated from your data. Yes.
+
+[23:37 - 23:49] Are you saying that 2. for the quasi? So these numbers come from estimates based on the likelihood
+
+[23:49 - 24:04] in the model. So the fact that your variance is equal in the data is about 2.5 times the mean. That's exactly why you get this number. Okay. So if you say, oh, we choose the quasi-Poisson
+
+[24:05 - 24:15] because the phi is equal to that ratio, well, it's supposed to be. That's like saying I chose
+
+[24:15 - 24:29] pizza because it's pizza. Okay. Right? So you want to have a better structural logic behind the choice. Okay. And so what I think you have here is an attempt to build an empirical logic behind the
+
+[24:29 - 24:47] choice. And the empirical logic suggests that the quasi-Poisson gets closer to the actual variance. But it's not tremendously closer. I think these two solutions are not terribly different. But each
+
+[24:47 - 24:58] of those models captures a different data generating process, a process by which you get lots of zeros and a process by which you get some counts that are much higher. You want to be able
+
+[24:58 - 25:12] to say, not after you've already done the analysis and said, okay, this model gives me the numbers that are right, because you don't know what the right numbers are. You want to be able to say,
+
+[25:12 - 25:25] because I don't know what the right numbers are, I want to choose a model that best reflects what I do know about the process. And so that's what I want you to, when I'm asking you this question,
+
+[25:25 - 25:41] why might we choose quasi-Poisson versus negative binomial, doesn't have anything to do with what these numbers are. I can see what these numbers are. And I don't know how I would make the choice based on these numbers. What you want to do is be able to go in the same way where you're like,
+
+[25:41 - 25:56] well, OLS produces continuous predictions. I know I'm never going to get that. My next, the best choice for a count, which is what I'm going to get, because I have counts of articles,
+
+[25:56 - 26:09] Poisson, because that's exactly what it models. You're like, well, shoot, we have all these zeros and we have a few large numbers. So we have over-dispersion, which is a violation of the
+
+[26:09 - 26:21] Poisson assumptions. So I can't totally rely on that because my data breaks a big assumption. You've got these other two things that now generate counts, but they didn't generate
+
+[26:21 - 26:33] counts through different pathways. One is through a quasi-likelihood and some voodoo that I don't totally understand because I don't use quasi-Poisson, but this is what I want you
+
+[26:33 - 26:48] to explain to me. And the negative binomial, which actually treats the counts as the manifestation of some probability of getting over the zero hump, sort of is what it does.
+
+[26:49 - 27:01] That structure might actually be why you would argue for it. So that even when you look at this here, you say, well, quasi-Poisson is treating this rate as if it is continuous in time. But
+
+[27:01 - 27:11] I actually believe that there are months where nothing actually happens. And so it's not continuous. We have to get over that hump before we can start modeling the rate. That's why I would
+
+[27:11 - 27:22] choose a negative binomial. Or I would choose a hurdle model that explicitly tries to deal with that hump. Here we say there is a hump. We're not exactly sure where it is. We're going to try and
+
+[27:22 - 27:33] estimate it from the data and conditional on the idea that we get it right. Then we can model the actual continuous part of the process or the count part of the process. A hurdle model actually
+
+[27:33 - 27:47] allows you to use covariates to try and inform where that hump is and why it varies so that you can make sure you're getting it in the right place and then estimate the count process conditional on
+
+[27:47 - 27:57] the idea that you've gotten this thing in the right spot. Yeah. Okay. So next I also, so the next slide, then I tried- You did a hurdle model.
+
+[27:57 - 28:08] Yeah, I really looked at it. Because you once asked a question, I think in one of our meetings, you once asked a question because there's a point, there's when you say like,
+
+[28:09 - 28:25] there's a point you ask a question like, what is the probability of framing? Like we might have cases like, what's the probability that the Congress discusses ESA? And then what is the probability, given that they discussed it, that they talk about it the way
+
+[28:25 - 28:43] they do in the news? Yes. So something like that. So now I thought of it as, okay, maybe the hurdle model would handle that because the hurdle model will separate, will handle that into two parts. So the first engagement, the first engagement, it handles,
+
+[28:44 - 28:59] sorry- Wait, let me go use the restroom while you- All right. If you can do that, just give yourself a second. Okay.
+
+[30:17 - 30:46] Yeah. So the hurdle model handles this in two parts. So the first part, whereby we have the
+
+[30:46 - 31:01] 359 zero months and we want to know, so those are the structure zeros. Yes. So we want to answer a question. So the first question I want to look at is, so we have a threshold that we have. So below
+
+[31:01 - 31:14] there, I define what the threshold is. Yeah. The point at which the ESA listing becomes important enough for Congress to say something about it. So below the threshold is when the Congress
+
+[31:14 - 31:29] ignores the discussion. Then above it is where the Congress engages and discusses something about listing. So the first part handles that. So there we have a logistic regression
+
+[31:30 - 31:42] that is binary. So it answers, does the Congress produce an ESA listing document at a particular month or does the Congress cross the threshold from zero attrition to any attrition?
+
+[31:43 - 31:55] Yeah. Then the second part is, now here we are having the account component. Then I looked at the negative binomial. So how many, now here we're only looking at those months
+
+[31:55 - 32:08] where the Congress does something about that ESA listing discussions. So how many documents does the Congress produce given Congress is active? So for those 12 months where the Congress
+
+[32:08 - 32:24] is active, now this is where we focus. Yeah. So I looked at maybe the hurdle model will help us solve the challenge we have. Then, so we would be dealing now with two coefficients
+
+[32:25 - 32:38] for the News Lab. So we have the first coefficient, which is from part one, then the other coefficient, which is from part two. So I would think maybe the hurdle model will handle
+
+[32:38 - 32:48] that or address the challenge since it splits the outcome into two stages. Yeah.
+
+[32:48 - 33:09] So, first of all, this is what I, this is really what I wanted you to do. Okay. I wanted words for why you thought this might work and then words for why you don't think it works.
+
+[33:10 - 33:31] This is helpful, but this is entirely phenomenological, meaning this evidence makes sense or given the data that you have, the pilot data that you've looked at. Now, I understand why you make the choice, but that means you've made the choice for how to do your analysis after you've already done it. Yeah. That's not good practice.
+
+[33:32 - 33:51] This is a logical argument for why you might approach it in this way. And I think this question of structural zeros and sampling zeros is really relevant in your case, right? And this breaks it out, and you can see that there are actually coefficients you're interested in, in both parts of the model.
+
+[33:53 - 34:08] The things that I'm a little bit concerned about in this, as you've written it out, first of all, how do you know these are structural zeros? These are just the ones where there was no news coverage? Which one?
+
+[34:10 - 34:23] The first part? The second part, where you say estimated from the 12 active months only. Is that defined based on Congress or defined based on the news? Based on the Congress. So that makes this a bit circular.
+
+[34:24 - 34:36] Because this first part of the model is supposed to say, when should Congress be zero, regardless of what's happening there?
+
+[34:36 - 34:56] If you say, we only care about when Congress is greater, then you've mixed some of your structural zeros into your sampling zeros. And so the model actually needs to estimate when a zero is part of the sampling and when the zero is part of the structure.
+
+[34:57 - 35:10] You don't want to change the data set to do that. Otherwise, you eliminate the model's ability to tell the difference between the two. The other thing I would be a little bit concerned about here, and I'm not sure that this is the case,
+
+[35:11 - 35:28] but if your over-dispersion is entirely driven by those sampling zeros, then a Poisson model as the second part of the hurdle might be a much better choice than a negative binomial.
+
+[35:29 - 35:42] And part of the reason I'm saying that... You said Poisson or quasi? Poisson. So the problem that you identified in your quasi-Poisson negative binomial is that the data is over-dispersed.
+
+[35:45 - 36:01] Or under-dispersed. Probably under-dispersed, where the variance is high and the mean is low. Sorry, other way around. So you identified that as a problem. The hurdle attempts to solve that
+
+[36:02 - 36:19] by pulling some of those zeros out, which should then make the other part of the model much more identifiable. Because now, maybe the mean equal variance holds and you only have one parameter
+
+[36:19 - 36:34] that you're trying to deal with in lambda. If you introduce a negative binomial here, or a quasi-Poisson, you now have that theta or phi parameter, which is also trying to suck up zeros, which is going to
+
+[36:34 - 36:48] work against your hurdle and create ambiguity in your ability to identify those different kinds of zeros. So just a minute. So from what you're trying to explain, are you saying that
+
+[36:49 - 36:59] it's not a good idea to bring the negative binomial here for the second part? It would be better for a Poisson? I would start with a Poisson on that one. And that's a pretty
+
+[36:59 - 37:11] traditional hurdle structure, where you have a binomial for the crossing of the zero threshold and a Poisson for what happens after that. Now you might find that you still have a lot of
+
+[37:11 - 37:23] over-dispersion after that, in which case we would try a different likelihood to deal with that. But I think in the phase of, because this is now a mixture model, you're mixing two different
+
+[37:23 - 37:38] distributions. So it gets a little bit wobbly. The simplest version of this is going to be a binomial plus a Poisson. After that, we might think about whether there are things we need to do to deal
+
+[37:38 - 37:54] with those components. The other thing that I'm not entirely clear on yet here is how the temporal autocorrelation comes in. So when you originally pitched this as an autoregressive
+
+[37:54 - 38:10] model, it was in the covariance matrix being modified to reflect the fact that we expect sequential observations to be related to one another, more related to one another than if
+
+[38:10 - 38:29] they were further apart. In this structure, it's a little bit harder to think through how that's going to work. However, so I think what we have to do is think about, is there a way
+
+[38:30 - 38:48] to characterize the values for the news lag and the congressional lags in a way that makes them somewhat independent? Meaning if you have your congressional outcome
+
+[38:48 - 38:59] at time t, and you sum all of your news and Congress stuff up to that point, then your next time t has to be far enough away where you think you're going to break that.
+
+[39:00 - 39:11] Okay. Or we have to include some way of adding a covariance matrix that allows for the fact that
+
+[39:11 - 39:23] the correlation for near observations should be higher than when they're far apart. We can do that, it's just not in the way you've written the model out yet. Does that make sense?
+
+[39:23 - 39:35] Yeah, it does. I think I'll need to read more about that. As far as continuing to try things, I would say, see if you can learn how to fit the hurdle model
+
+[39:37 - 39:55] and the simplest one you can fit, just so you get a sense for how it behaves and what the interpretation of the different covariance looks like. Okay. Because it will be easier once you get that part working to add a covariance matrix,
+
+[39:55 - 40:07] and if it breaks something, you'll know better how to fix it. When you add everything all at once, lots of things break, and it becomes like untying a big mess of a knot, right?
+
+[40:07 - 40:23] Okay. Yes. Do you think we should consider any baseline model?
+
+[40:29 - 40:44] Okay. If we finalized the hurdle model, maybe someone would ask, okay, what are you comparing this with? Do you think that is relevant, or based on maybe because we've gone through all this testing, then we have reasons why?
+
+[40:46 - 41:03] So you might have multiple versions of a hurdle model. Okay. But what I ultimately wanted you to be able to do, and what I think the next step is coming out of here, is to imagine exactly that. Agnes, you fit this complicated hurdle model.
+
+[41:04 - 41:15] Why didn't you just fit this with ordinary least squares? Here are four sentences, five sentences about what my data looks like and why it violates the assumptions of ordinary least squares.
+
+[41:16 - 41:32] Not in a post hoc way where you say, well, I tried ordinary least squares, and it's wrong. But in the way where you said, and I recognize this isn't what you did, but this is how I want
+
+[41:32 - 41:44] you to start to think about these analyses, which is to say, I didn't do an ordinary least squares because it's nonsensical. I cannot have continuous values in my data, and I cannot
+
+[41:44 - 42:00] have negative values in my data. That's right out. Agnes, you have counts. Why not fit a Poisson? Well, because Poisson's primary assumption is that the variance equals the mean,
+
+[42:00 - 42:11] but because we have so many zeroes and a few high counts, the variance is quite a bit larger than the mean, meaning it violates the assumptions of a Poisson, and so I'm not going with that
+
+[42:11 - 42:25] either. Why not a negative binomial? What I ultimately want you to be able to do is have a document where you've written out exactly why you didn't use these things,
+
+[42:26 - 42:39] and exactly why, which is, this is pretty close as to why you would use a hurdle model, especially if you put it into the words of your actual data. And then you'll have those four
+
+[42:39 - 42:50] paragraphs so that you can use the one as the method section for your paper, and use the other three when the inevitable reviewer says, hurdle models are complicated. I don't understand why
+
+[42:50 - 43:09] you didn't just use a simpler one. You can say, well, that's easy. The model is wrong before I even fit it. Here's why. That's right. And those justifications are not based on this
+
+[43:09 - 43:24] table. Yeah, sure. Because this table doesn't actually give you a... It is the structure of the likelihoods that each of these models uses that help you make
+
+[43:24 - 43:35] the choice. Yeah. I think with this table, I was trying to compare the variances that I get after dealing with
+
+[43:35 - 43:46] those dispersion parameters. That's what I was trying to compare with. Yeah, and it looks like the quasi-poisson and negative binomial both provide reasonable
+
+[43:46 - 43:59] variance adjustments once you've accounted for those things, but it's not clear which one you would choose. It's not clear, yeah. And the variance is only one category that you're interested in getting unbiased estimates
+
+[43:59 - 44:09] of. And so as you do some more reading, you'll say over-dispersion in quasi-poisson regression
+
+[44:09 - 44:24] tends to lead to underestimates of regression coefficients. We get biased regression coefficients. Well, we don't want that, right? Getting the variance exactly right is no good if the regression coefficients are all still
+
+[44:24 - 44:35] wrong because they're trading off with one another. Same thing with the negative binomial. That's a little bit why I am worried about the negative binomial here, is because your
+
+[44:35 - 44:50] zeros start to trade off between these two parts of the models, which means that a beta-40 here and a beta-41, they can start sharing back and forth and create two equivocal decisions.
+
+[44:50 - 45:03] And if you get one, you're going to believe that it's really important for the news in the Congress part. In the Congress part, yeah. But if you get the other one, you'll think it's really important. The news really drives when Congress talks about ESA, but it doesn't have anything to
+
+[45:03 - 45:13] do with what it says about it or how regularly it says something about it. And that'll be mostly a function of the way the likelihood gets estimated.
+
+[45:13 - 45:31] So if you did this in a Bayesian way, what you'd have is what we call a multimodal posterior where...
+
+[45:31 - 45:43] So you might have... And the news in the second part of the model is this, right?
+
+[45:43 - 45:55] 41? Yeah. And you might get something like...
+
+[45:55 - 46:11] And basically, what this is reflecting is that when we estimate beta-40 to be high, we subsequently estimate beta-41 to be low. And when we estimate beta-40 to be low, we subsequently estimate beta-41 to be high,
+
+[46:11 - 46:22] because they're trading off. And that is a thing we want to break, because that is what you're trying to interpret for inference.
+
+[46:22 - 46:33] For inference, yeah. And you'd like to know when the... They are potentially the opposite to one another. The opposite, yeah.
+
+[46:33 - 46:43] That's right. Last time, you had a certain book for statistics you were trying to give me. Is it fine if I look at it? Because...
+
+[46:44 - 47:05] I gave you Statistical Rethinking. Statistical Rethinking. There's another book that you had. Is it this one? Yeah, because I'm looking for a book with... I think... I don't know if it has Hado. I'm looking for some Hado models. That one should have Hado models in it.
+
+[47:05 - 47:19] In the Rethinking book, they're just called zero-inflated models. So there's a zero-inflated Poisson model in there, and maybe a zero-inflated binomial
+
+[47:19 - 47:28] model. And I think the chapter that they show up in is the Monsters and Mixtures chapter. Oh, yeah.
+
+[47:28 - 47:49] I don't think it has the Hado model.
+
+[47:49 - 47:52] Have you done the Hado model before? Mm-hmm. Okay.
+
+[47:52 - 48:21] Zero-inflated negative binomial or Poisson regression.
+
+[48:21 - 48:36] So it starts here, and here's the zero-inflated negative binomial, and it doesn't quite go
+
+[48:36 - 48:48] all the way into the Poisson. This is what you have specified, which may be fine, but the Poisson would be the easier
+
+[48:48 - 48:52] model to fit. Mm-hmm. Okay. I don't know...
+
+[49:22 - 49:40] This might be partially helpful.
+
+[49:40 - 49:59] This one has quite a bit of stuff on zero inflation in there.
+
+[49:59 - 50:22] There's no code in this, so it's all just notation, but maybe that's enough. So this one probably has more background intellectual stuff on zero inflation.
+
+[50:22 - 50:33] This one...
+
+[50:33 - 50:44] So this one has zero inflation in it, and it's by one of the authors of that green book that you're holding.
+
+[50:44 - 50:58] I like this book a lot, but all of the code you write your own Markov chain sampler in R, which helps you learn a bit about it, but it's a bit more...
+
+[50:58 - 51:12] This is probably... This will teach you the code, which I don't care about. I see you gravitating towards this, but you are going to ultimately have to explain why this is the right model, not just that it ran.
+
+[51:12 - 51:22] This one is a little easier to read, but it's going to give you a little more of the statistical underpinnings. This one is going to give you that, plus this, the hard way.
+
+[51:22 - 51:36] Wow. So it's better to have this, the tool. I would... Possibly. You're a computing PhD student, so the idea of writing your own Markov chain sampler,
+
+[51:36 - 51:51] to me, doesn't seem out of the realm of possibilities. All the code is in here. It's just a little bit harder to understand it, because it's not a package, but if you've never run a Bayesian model before, so maybe this is a reasonable place to think, I might
+
+[51:51 - 52:01] start with this one and that one, and then once you understand it, you can go for the easy one. Okay. So is it okay if I can borrow them?
+
+[52:01 - 52:11] Yeah. I'll return them back. Okay. Thank you so much. And we can talk about those. If you have questions about those chapters, you should just bring those to our meeting, and we can talk through them. Because if it's been a while since you've taken a stats class, and you've not taken a Bayesian class, there's going to be some stuff in there that is a little bit unfamiliar, is my guess.
+
+[52:11 - 52:21] Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay.
+
+[52:21 - 52:31] Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay.
+
+[52:31 - 52:41] Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay. Okay.
+
+[52:41 - 52:55] And there's also a copy of that one with the phoenix on it, in the fish bowl. Okay. So you can borrow that copy, but if you end up bringing it back, and then decide you need
+
+[52:55 - 53:13] another one, there's another copy in there. Maybe. Let me first finish with this, then I can get another. Yeah. I like that green book a lot, as far as helping me understand what's happening.
+
+[53:13 - 53:24] It's a little bit more of a narrative description. The math in there also has graphs, and it's basically like, okay, if you want to think about it from a notation standpoint, here's what it looks like.
+
+[53:24 - 53:35] But if you want to think about it from a graph, and how these different things are moving into the likelihood, we have those two. So you buy these books? Mm-hmm. Hmm. Interesting.
+
+[53:35 - 53:48] All right. Thank you so much. So hopefully, too, I don't think next week ... Next week, I might be away for the summer school, maybe in case of something, or sending some materials.
+
+[53:48 - 54:00] Yeah. If you want to work on writing up those paragraphs of, like, Poisson, not Poisson, quasi-Poisson, not quasi-Poisson. Negative binomial, not quite negative binomial.
+
+[54:00 - 54:11] Hurdle model, here's why. And just start to get practice in writing those things in text form, because they're going to have to go in your proposal anyway. Yeah. Okay.
+
+[54:11 - 54:23] So you think you recommend I should start writing on that? Maybe I should have a draft? Maybe I could share? If you can get there by next week, that's great. And it can be a very rough draft, but we can sort of figure out, okay, what's missing here.
+
+[54:23 - 54:34] Okay. All right. Okay. So aim for a rough draft. It doesn't have to be perfect. And you might write something, and then read something in those books, and be like, no, not this. Fine.
+
+[54:34 - 54:39] Okay. All right. Okay. I'll have that. Okay.
+
+[55:58 - 55:59] Bye-bye.
