@@ -1,0 +1,604 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+\documentclass[11pt]{article}
+
+% Remove the "review" option to generate the final version.
+%\usepackage[review]{acl}
+\usepackage[]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsfonts}  % for mathbb
+\usepackage{enumitem}
+\setlist[enumerate]{itemsep=0mm}
+\newtheorem{definition}{Definition}
+\newtheorem{problem}{Problem}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+% This is not strictly necessary, and may be commented out.
+% However, it will improve the layout of the manuscript, and will typically save some space.
+\usepackage{microtype}
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in the typewriter font.
+\usepackage{inconsolata}
+% If the title and author information does not fit in the area allocated, uncomment the following
+%\setlength\titlebox{<dim>}
+% and set <dim> to something 5cm or larger.
+
+\title{A Large Language Model Analysis of Media and Congressional Discourse on the ESA}
+% Author information can be set in various styles:
+% For several authors from the same institution:
+% \author{Author 1 \and ... \and Author n \\
+%         Address line \\ ... \\ Address line}
+% if the names do not fit well on one line use
+%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
+% For authors from different institutions:
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \And  ... \And
+%         Author n \\ Address line \\ ... \\ Address line}
+% To start a seperate ``row'' of authors use \AND, as in
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \AND
+%         Author 2 \\ Address line \\ ... \\ Address line \And
+%         Author 3 \\ Address line \\ ... \\ Address line}
+
+\author{AGNES NAMYALO\\
+  Department of Computer Science \\
+  Boise State University \\
+  \texttt{agnesnamyalo@u.boisestate.edu}
+  
+}
+
+\begin{document}
+\maketitle
+
+\section{Chapter 1 - Methods: Extracting ESA Narratives}
+\begin{center}
+  \textit{A Comparison of LLM-Based NPF Extraction and
+          Structural Topic Modelling}
+\end{center}
+
+\subsection{Text corpora}
+ 
+We assembled two text corpora. The news corpus consists of 300
+\textit{Wall Street Journal} (WSJ) articles identified through the
+ProQuest database using a keyword search procedure targeting ESA listing
+events. Articles were retrieved for the period 1984--2025. The
+congressional corpus consists of 300 documents from the Congressional
+Record retrieved via the GovInfo API for the period 1995--2025,
+including floor speeches, committee statements, and extensions of
+remarks referencing ESA listing events. Beginning the congressional
+corpus in 1995 reflects the availability of systematic digital records
+through GovInfo, and is consistent with the period following the 104th
+Congress when ESA oversight activity intensified \citep{Repetto2006}.\\
+\\
+
+Put a figure\\
+\\
+ 
+Both corpora were stratified by ESA policy category to ensure
+representation across the range of ESA policy activities. Ten
+meta-categories were constructed: ESA Regulatory/Agency Action (news:
+19.3\%, congress: 19.0\%), ESA Legislative Action (news: 17.3\%,
+congress: 42.7\%), ESA Species Listing (news: 17.3\%, congress: 5.7\%),
+ESA Litigation (news: 11.0\%, congress: 1.0\%), ESA Habitat/Recovery
+(news: 9.7\%, congress: 7.3\%), ESA Judicial Review (news: 9.3\%,
+congress: 1.0\%), ESA Species Delisting (news: 4.3\%, congress: 5.0\%),
+ESA Conservation Agreements (news: 1.7\%, congress: 0.7\%), ESA Funding
+(news: 1.7\%, congress: 9.0\%), and Other/Non-ESA (news: 8.3\%,
+congress: 8.7\%). The disparity in Species Listing representation
+between corpora --- 17.3\% in news versus 5.7\% in congress --- is
+itself substantively informative and consistent with the agenda-setting
+hypothesis.
+ 
+
+\subsection{Data Collection}
+
+\subsection{Outcome and predictor variables}
+ 
+The primary analysis focuses on ESA Species Listing documents, the category with the largest disparity between news and congressional representation and therefore the most direct test of the agenda-setting
+hypothesis for this specific policy process.\\
+
+The ESA encompasses a wide range of policy activities, but species listing is among the most prominent and recurring topics in ESA discourse — it is the foundational act that triggers federal protections, generates public controversy, and consistently attracts media attention from diverse stakeholders \citep{Repetto2006}. Despite this centrality, listing appears in only 5.7\% of congressional documents compared to 17.3\% of news articles in our corpus. This three-to-one disparity between media coverage and congressional production is precisely the structural gap that agenda-setting theory predicts, and it makes listing the most direct and interpretable test of the hypothesis. The primary analysis therefore focuses on ESA Species Listing.\\
+
+The \textbf{outcome variable} is $\text{cong}_{t}$: the count of congressional ESA listing documents produced in month~$t$, aggregated from the 300-document congressional corpus. Monthly counts were
+constructed by assigning each document to its date of publication and summing within calendar months over the period January~1995 to December~2025, yielding $n = 371$ monthly observations.
+ 
+The \textbf{primary predictor} is $\text{news\_lag}$: the count of WSJ ESA listing articles published in month $t{-}1$. The one-month lag reflects the theoretical prediction of the agenda-setting hypothesis
+that media coverage precedes and influences legislative attention --- and ensures that the causal direction is identified by time ordering \citep{Granger1969}.
+ 
+The \textbf{control variable} is $\text{cong\_lag}$: the count ofcongressional ESA listing documents in month $t{-}1$, included to capture congressional own-momentum and separate it from the media
+effect. Without this control, the news coefficient would absorb autocorrelation in congressional activity that is unrelated to media influence.
+
+\section{Statistical Approach}
+Selecting the appropriate model for $\text{cong}_{t}$ requires first characterising the properties of the outcome variable, then evaluating each candidate model against those properties. We follow the protocol
+of making model selection decisions on structural grounds --- based on the nature of the data generating process --- rather than on post-hoc fit comparisons \citep{Zuur2010, Gelman2007}.
+ 
+\subsection{Properties of the outcome variable}
+ 
+Table~\ref{tab:summary} presents summary statistics for
+$\text{cong}_{t}$ across the 371 monthly observations.
+ 
+\begin{table}[H]
+  \centering
+  \caption{Summary statistics for the monthly count of congressional
+           ESA listing documents ($\text{cong}_{t}$),
+           $n = 371$ months, January~1995 -- December~2025.}
+  \label{tab:summary}
+  \begin{tabular}{lrl}
+    \toprule
+    Statistic & Value & Note \\
+    \midrule
+    $n$ (months)           & 371    & January 1995 -- December 2025 \\
+    Months with $\text{cong}_{t} = 0$ & 359 (96.8\%) & Structural zeros \\
+    Months with $\text{cong}_{t} > 0$ & 12 (3.2\%)  & Active months \\
+    Maximum                & 5      & January 2025 \\
+    Mean ($\bar{y}$)       & 0.046  & Near-zero baseline \\
+    Variance ($\hat{\sigma}^2$) & 0.103 & Exceeds mean \\
+    Var/Mean ratio         & 2.25   & $> 1$: overdispersed \\
+    Skewness               & 11.27  & Extreme right skew \\
+    Kurtosis               & 157.93 & Heavy tails \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+Four properties of $\text{cong}_{t}$ are immediately relevant to model
+selection. First, the outcome is a \textit{count}: it can only take
+non-negative integer values. Second, it is \textit{heavily zero-inflated}:
+96.8\% of observations are zero, substantially more than would be expected
+from a Poisson distribution with the observed mean
+\citep{Welsh2000, Mullahy1986}. Third, it is \textit{overdispersed}: the
+variance-to-mean ratio of 2.25 violates the Poisson assumption that
+variance equals mean \citep{Cameron1998}. Fourth, it exhibits
+\textit{rare episodic spikes}: the maximum of 5 documents in January~2025
+represents a value more than 100 times the overall mean, and the
+distribution is correspondingly skewed ($\text{skewness} = 11.27$,
+$\text{kurtosis} = 157.93$).
+ 
+These four properties jointly eliminate Ordinary Least Squares as a
+candidate model and progressively constrain the choice toward the Hurdle
+model, as we now show.
+ 
+%% ── 3.2 ─────────────────────────────────────────────────────────
+\subsection{Why ordinary least squares is inappropriate}
+ 
+OLS models the expected outcome as a linear function of predictors, minimising the sum of squared residuals:
+ 
+\begin{equation}
+  \text{cong}_{t}
+    = \alpha + \beta_4 \cdot \text{news\_lag}
+             + \beta_3 \cdot \text{cong\_lag}
+             + \varepsilon, \quad
+  \varepsilon \sim \mathcal{N}(0, \sigma^2)
+  \label{eq:ols}
+\end{equation}
+ 
+Three structural requirements of OLS are violated by $\text{cong}_{t}$.
+First, OLS assumes a \textit{continuous normally distributed outcome},
+but $\text{cong}_{t}$ is discrete and bounded below at zero. For April
+1999, where $\text{news\_lag} = 3$ and the actual outcome was
+$\text{cong}_{t} = 1$, OLS predicts:
+ 
+\begin{equation*}
+  \widehat{\text{cong}}_{t}
+    = 0.038 + 0.068 \times 3 + 0.033 \times 0 = 0.242
+\end{equation*}
+ 
+This prediction is categorically impossible. No data-generating process
+for whole-number counts can produce 0.242 documents. Second, OLS assumes
+\textit{constant variance} (homoscedasticity) in the residuals, but
+count data variance typically grows with the mean, producing the
+wedge-shaped residual pattern characteristic of heteroscedastic count
+data \citep{Cameron1998}. Third, the fitted regression line can produce
+\textit{negative predictions} for months with low news_lag values, which
+are impossible for counts. OLS is therefore structurally misspecified
+for this analysis and is rejected before any data examination.
+ 
+%% ── 3.3 ─────────────────────────────────────────────────────────
+\subsection{Poisson regression: the correct family, with a violated
+            assumption}
+ 
+Poisson regression belongs to the Generalised Linear Model family
+\citep{Nelder1972, McCullagh1989} and is the standard baseline model
+for count data. It models the expected count through a log link
+function:
+ 
+\begin{align}
+  \log(\lambda_i)
+    &= \alpha + \beta_4 \cdot \text{news\_lag}_i
+               + \beta_3 \cdot \text{cong\_lag}_i
+  \label{eq:poisson_link} \\[3pt]
+  \lambda_i
+    &= \exp\!\bigl(
+         \alpha + \beta_4 \cdot \text{news\_lag}_i
+                + \beta_3 \cdot \text{cong\_lag}_i
+       \bigr)
+  \label{eq:poisson_mean}
+\end{align}
+ 
+The exponential function guarantees $\lambda_i > 0$ for all covariate
+values, resolving the impossibility problem of OLS. For April~1999,
+Poisson gives $\hat\lambda = 0.336$, and the resulting Poisson
+distribution assigns $P(\text{cong}_{t} = 1) = 24.0\%$ --- meaning the
+actual observed outcome falls within a meaningful probability region of
+the model's predictions.
+ 
+Poisson regression also confirmed the direction of the agenda-setting
+signal: $\hat\beta_4 = 0.714$, corresponding to a rate ratio of
+$\exp(0.714) = 2.04$. Each additional WSJ ESA listing article in the
+previous month is associated with a doubling of the expected
+congressional count in the current month, holding prior congressional
+activity constant.
+ 
+However, the Poisson distribution requires that the variance equal the
+mean --- a property known as equidispersion:
+ 
+\begin{equation}
+  \operatorname{Var}(\text{cong}_{t}) = \lambda
+  \label{eq:equidispersion}
+\end{equation}
+ 
+For $\text{cong}_{t}$, the variance ($0.103$) exceeds the mean
+($0.046$) by a factor of $2.25$, confirming \textit{overdispersion}
+\citep{Cameron1998, Hilbe2011}. The consequence of fitting Poisson to
+overdispersed data is systematic underestimation of standard errors by a
+factor of approximately $\sqrt{2.25} = 1.50$, producing p-values that
+are too small and inflated Type~I error rates \citep{Ver-Hoef2007}.
+Standard Poisson is therefore insufficient for this data, though it
+establishes the correct model family and baseline coefficient direction.
+ 
+%% ── 3.4 ─────────────────────────────────────────────────────────
+\subsection{Quasi-Poisson: correcting the standard errors}
+ 
+Quasi-Poisson \citep{McCullagh1989} relaxes equidispersion by
+introducing a dispersion parameter $\varphi$, estimated from the Pearson
+residuals:
+ 
+\begin{equation}
+  \hat\varphi
+    = \frac{1}{n-p}
+      \sum_{i=1}^{n}
+      \frac{(\text{cong}_{t_i} - \hat\lambda_i)^{2}}
+           {\hat\lambda_i}
+    = \frac{919.80}{368} = 2.50
+  \label{eq:phi}
+\end{equation}
+ 
+where $n = 371$ and $p = 3$ ($\alpha$, $\beta_4$, $\beta_3$). The
+variance is modelled as $\operatorname{Var}(\text{cong}_{t}) = \varphi
+\cdot \lambda$, and all standard errors are multiplied by
+$\sqrt{\hat\varphi} = \sqrt{2.50} = 1.581$. This correction preserves
+the Poisson coefficient estimates while producing honest uncertainty
+quantification.
+ 
+Quasi-Poisson is a correction applied to the Poisson likelihood after
+fitting, not a re-estimation under a new likelihood. The coefficients
+are therefore identical to Poisson. Quasi-Poisson treats the variance as
+growing linearly with the mean (equation~\ref{eq:qp_var}):
+ 
+\begin{equation}
+  \operatorname{Var}(\text{cong}_{t}) = \varphi \cdot \lambda
+  \label{eq:qp_var}
+\end{equation}
+ 
+While Quasi-Poisson addresses the standard error problem, it does not
+address the structural nature of the zero observations, as we discuss
+in Section~\ref{sec:zeros}.
+ 
+%% ── 3.5 ─────────────────────────────────────────────────────────
+\subsection{Negative Binomial regression: quadratic overdispersion
+            and fat tails}
+ 
+The Negative Binomial (NB) distribution \citep{Hilbe2011} provides a
+structurally richer model for overdispersion than Quasi-Poisson. It
+introduces a dispersion parameter $\theta$ estimated through maximum
+likelihood, and models the variance as a quadratic function of the mean:
+ 
+\begin{equation}
+  \operatorname{Var}(\text{cong}_{t}) = \mu + \frac{\mu^2}{\theta}
+  \label{eq:nb_var}
+\end{equation}
+ 
+The $\mu^2/\theta$ term grows faster than the mean as $\mu$ increases,
+producing fat tails that assign non-trivial probability to extreme
+counts. When $\theta \to \infty$, equation~\eqref{eq:nb_var} collapses
+to Poisson equidispersion; as $\theta \to 0$, the variance grows without
+bound, accommodating arbitrarily heavy tails. For $\text{cong}_{t}$,
+$\hat\theta = 0.058$ --- a small value, consistent with the extreme
+January~2025 spike ($\text{cong}_{t} = 5$) being a genuine feature of
+the data-generating process rather than an outlier.
+ 
+Unlike Quasi-Poisson, NB is a full re-estimation under the NB
+likelihood. Consequently, the regression coefficients differ from
+Poisson: $\hat\beta_4 = 0.486$ under NB (rate ratio $= 1.63$) compared
+to $0.714$ under Poisson (rate ratio $= 2.04$). The difference reflects
+NB's absorption of extreme month variance into $\hat\theta$ rather than
+into the predictor coefficient estimates.
+ 
+The choice between Quasi-Poisson and Negative Binomial is a structural
+one, not a numerical one. The Quasi-Poisson dispersion parameter
+$\varphi$ and the NB parameter $\theta$ are not comparable quantities
+--- they operate through different likelihoods on different mathematical
+scales. The structural argument for NB over Quasi-Poisson in this
+application is that the quadratic variance function in
+equation~\eqref{eq:nb_var} better represents a data-generating process
+where extreme months --- driven by concentrated political events --- can
+occur with non-trivial probability that a linear variance model cannot
+assign.
+ 
+%% ── 3.6 ─────────────────────────────────────────────────────────
+\subsection{The zero structure: structural versus sampling zeros}
+\label{sec:zeros}
+ 
+Both Quasi-Poisson and Negative Binomial treat the 359 zero
+observations as draws from a single distribution with a low mean.
+However, 96.8\% zeros in a monthly political activity series is not
+simply a consequence of a small expected count. It reflects a
+distinction that is critical for model specification
+\citep{Mullahy1986, Welsh2000}:
+ 
+\begin{description}[leftmargin=2em, itemsep=4pt]
+  \item[Sampling zeros] arise when the expected count is low and the
+    random draw from the count distribution happens to produce zero.
+    These zeros are part of the count process and are appropriately
+    modelled by Poisson or NB.
+  \item[Structural zeros] arise when congressional engagement with ESA
+    listing does not occur in a given month because the issue has not
+    crossed the attention threshold --- regardless of news coverage.
+    These zeros come from a separate threshold process and cannot be
+    appropriately modelled by the count distribution alone.
+\end{description}
+ 
+The distinction is theoretically motivated. As \citet{Baumgartner1993}
+and \citet{Jones2004} argue, legislative attention to niche policy
+issues operates as a punctuated equilibrium: long periods of equilibrium
+(structural silence) are punctuated by episodes of intense attention
+driven by exogenous shocks. ESA listing is precisely this type of
+niche issue. The 12 active months in our dataset cluster around
+identifiable political events --- the 1999 salmon crisis, the 2015 ESA
+reauthorisation debates, and the 2025 legislative push --- consistent
+with a threshold process rather than a continuous low-probability one.
+ 
+When a model treats structural zeros and sampling zeros as the same type
+of observation, the coefficient estimates represent a mixture of two
+different relationships: the relationship between news coverage and
+structural silence, and the relationship between news coverage and
+active count intensity. These are not the same relationship and should
+not be estimated as if they were.
+ 
+%% ── 3.7 ─────────────────────────────────────────────────────────
+\subsection{The Hurdle model: separating silence from activity}
+ 
+The Hurdle model \citep{Mullahy1986, Zeileis2008} explicitly
+represents the two-process structure described above. It consists of
+two components estimated simultaneously.
+ 
+\textbf{Part~1} (binary hurdle) models the probability that
+$\text{cong}_{t}$ crosses zero --- whether ESA listing crosses the
+congressional attention threshold in month~$t$:
+ 
+\begin{equation}
+  P(\text{cong}_{t} > 0)
+    = \operatorname{logistic}(
+        \alpha_0
+        + \beta_{40} \cdot \text{news\_lag}
+        + \beta_{30} \cdot \text{cong\_lag}
+      )
+    = \frac{e^{\eta}}{1+e^{\eta}}
+  \label{eq:hurdle1}
+\end{equation}
+ 
+where $\eta = \alpha_0 + \beta_{40}\cdot\text{news\_lag} +
+\beta_{30}\cdot\text{cong\_lag}$. This component uses all 371
+observations. The coefficient $\beta_{40}$ directly tests the primary
+form of the agenda-setting hypothesis: does media coverage increase the
+probability that ESA listing becomes salient enough to elicit
+congressional activity?
+ 
+\textbf{Part~2} (count component) models the number of documents
+produced given that $\text{cong}_{t} > 0$, estimated from the 12 active
+months only:
+ 
+\begin{align}
+  \text{cong}_{t} \mid \text{cong}_{t} > 0
+    &\;\sim\; \operatorname{Poisson}(\mu_i)
+  \label{eq:hurdle2a} \\[3pt]
+  \log(\mu_i)
+    &= \alpha_1
+       + \beta_{41} \cdot \text{news\_lag}_i
+       + \beta_{31} \cdot \text{cong\_lag}_i
+  \label{eq:hurdle2b}
+\end{align}
+ 
+The starting specification uses Poisson in Part~2 rather than Negative
+Binomial, following the recommendation of \citet{Zeileis2008}. The
+Hurdle model already removes structural zeros through Part~1; adding NB
+in Part~2 would introduce a second zero-handling mechanism ($\hat\theta$)
+that risks trading off against the hurdle threshold, creating ambiguity
+between $\beta_{40}$ and $\beta_{41}$. If residual overdispersion
+remains after fitting the Poisson Hurdle, the extension to NB in Part~2
+can be evaluated.
+ 
+The full probability mass function combines both components:
+ 
+\begin{equation}
+  P(\text{cong}_{t} = k) =
+  \begin{cases}
+    1 - P(\text{cong}_{t} > 0)
+      & k = 0 \\[6pt]
+    P(\text{cong}_{t} > 0) \cdot
+    \dfrac{P_{\text{Poisson}}(k \mid \mu)}
+          {1 - P_{\text{Poisson}}(0 \mid \mu)}
+      & k = 1, 2, 3, \ldots
+  \end{cases}
+  \label{eq:hurdle_pmf}
+\end{equation}
+ 
+The two-part structure also produces two distinct coefficients for
+news\_lag --- $\beta_{40}$ from Part~1 and $\beta_{41}$ from Part~2 ---
+that simultaneously answer two substantively different versions of the
+agenda-setting hypothesis:
+ 
+\begin{itemize}[itemsep=2pt]
+  \item $\beta_{40}$: Does media coverage predict \textit{whether}
+    Congress engages with ESA listing? (the threshold question)
+  \item $\beta_{41}$: Does media coverage predict \textit{how much}
+    Congress engages, given that it does? (the intensity question)
+\end{itemize}
+ 
+No single-component model in this progression --- OLS, Poisson,
+Quasi-Poisson, or Negative Binomial --- can answer both questions
+simultaneously.
+ 
+The model was fitted in R \citep{RCoreTeam} using the \texttt{pscl}
+package \citep{Zeileis2008} with the specification:
+ 
+\begin{verbatim}
+hurdle(cong_t ~ news_lag + cong_lag,
+       data      = df,
+       dist      = "poisson",
+       zero.dist = "binomial")
+\end{verbatim}
+ 
+%% ── 3.8 ─────────────────────────────────────────────────────────
+\subsection{Temporal autocorrelation}
+ 
+Monthly observations are temporally ordered and may not be
+independent given only one lag of each variable. Congressional activity
+in month $t$ may remain correlated with activity in month $t{+}2$ or
+beyond even after conditioning on $\text{cong\_lag}$ at $t{-}1$, and
+similarly for the news series \citep{Brandt2000}. The current model
+addresses autocorrelation through the inclusion of $\text{cong\_lag}$
+as a covariate, following the autoregressive count model approach of
+\citet{Brandt2000}. A formal test for residual autocorrelation in the
+Hurdle model residuals will be reported in the results. If significant
+residual autocorrelation is detected, extensions including a wider lag
+window or a correlation structure in the Part~2 component will be
+considered in subsequent analyses.
+ 
+%% ════════════════════════════════════════════════════════════════
+\section{Discussion}
+%% ════════════════════════════════════════════════════════════════
+ 
+%% ── 4.1 ─────────────────────────────────────────────────────────
+\subsection{Theoretical implications for agenda-setting}
+ 
+The two-part structure of the Hurdle model maps directly onto the
+theoretical framework of punctuated equilibrium theory
+\citep{Baumgartner1993, Jones2004}. The logistic component in Part~1
+models the punctuation --- the moment at which ESA listing crosses
+from equilibrium (congressional silence) into active attention. The
+count component in Part~2 models the intensity of activity once
+punctuation has occurred. The media coefficient in Part~1 ($\beta_{40}$)
+tests whether media coverage is the mechanism that produces punctuation;
+the coefficient in Part~2 ($\beta_{41}$) tests whether media coverage
+also drives the intensity of activity after punctuation.
+ 
+If both $\beta_{40}$ and $\beta_{41}$ are positive and significant, the
+finding would support a strong version of the agenda-setting hypothesis:
+media coverage both gets ESA listing onto the congressional agenda and
+drives the volume of legislative activity once it is there. If
+$\beta_{40}$ is significant but $\beta_{41}$ is not, the finding would
+support a threshold version: media matters for attention allocation but
+not for production intensity once the issue is salient. These
+distinctions cannot be recovered from single-component models.
+ 
+This analysis also speaks to an emerging debate in political
+communication about whether agenda-setting operates differently for
+niche versus valence issues \citep{Walgrave2008}. ESA listing is
+clearly a niche domain: it appears in 17.3\% of news articles in our
+corpus but only 5.7\% of congressional documents. For such issues,
+the threshold process modelled in Part~1 may be more theoretically
+important than the intensity process in Part~2, because the primary
+question is whether the issue makes it onto the congressional agenda
+at all. The Hurdle model allows both questions to be addressed without
+conflating them.
+ 
+%% ── 4.2 ─────────────────────────────────────────────────────────
+\subsection{Methodological contributions}
+ 
+This paper contributes a documented model-selection protocol for rare
+political event count data that may be useful to researchers facing
+similar data structures in other policy domains. The protocol has four
+steps. First, characterise the outcome variable before selecting a model:
+document the proportion of zeros, the variance-to-mean ratio, the
+skewness, and the temporal clustering of non-zero observations. Second,
+reject OLS on structural grounds: count data with a non-negative
+discrete distribution cannot be appropriately modelled by a continuous
+normal regression. Third, evaluate the Poisson family sequentially,
+testing for overdispersion at each stage and documenting the specific
+assumption that is violated. Fourth, assess whether the zeros are
+structural or sampling in nature by examining whether non-zero
+observations cluster around identifiable events, and by comparing the
+observed zero frequency to the Poisson-predicted frequency at the
+estimated mean.
+ 
+This protocol is consistent with the data exploration framework
+advocated by \citet{Zuur2010} and the model selection principles in
+\citet{Burnham2002}, extended to the specific challenges of political
+count data with rare events and structural zeros.
+ 
+A second methodological contribution concerns the integration of
+LLM-based narrative coding with statistical inference. The NPF
+extraction pipeline \citep{Jones2014} used in this paper represents
+a novel approach to operationalising theoretical constructs from
+political communication for large-scale quantitative analysis. The
+extraction of characters, plots, and morals at scale enables
+systematic empirical testing of narrative theory in a way that manual
+coding cannot support given practical resource constraints. The
+validation procedure described in Section~2 is an important step
+toward establishing the reliability of this approach, and future work
+should examine the conditions under which LLM-extracted narrative
+codes are more or less concordant with human coder judgements.
+ 
+%% ── 4.3 ─────────────────────────────────────────────────────────
+\subsection{Limitations and future directions}
+ 
+Several limitations of the current analysis should be acknowledged.
+First, the congressional corpus is limited to 300 documents. While
+this corpus was stratified to represent the range of ESA policy
+activities, the monthly count series for the Species Listing category
+contains only 12 active months across 30 years. This sparsity limits
+the precision of the count component estimates in Part~2 of the Hurdle
+model. Future work should extend the congressional corpus to provide
+a more comprehensive monthly count series.
+ 
+Second, the model includes only two predictors: news\_lag and
+cong\_lag. Congressional attention to ESA listing is likely influenced
+by other factors that are not captured in the current specification,
+including election cycles, changes in committee leadership, and
+executive branch actions such as proposed listing decisions by the
+Fish and Wildlife Service. The inclusion of these covariates in both
+parts of the Hurdle model would strengthen causal identification
+and address potential confounding.
+ 
+Third, the autocorrelation structure is addressed only through a
+single lag. As noted in Section~3.8, residual autocorrelation may
+remain in the Hurdle model residuals. Formal testing and, if necessary,
+modelling of this autocorrelation structure is an important next step.
+ 
+Fourth, this paper focuses on ESA Species Listing. The other nine
+ESA meta-categories --- including Legislative Action, Regulatory Action,
+Litigation, and Habitat/Recovery --- each represent distinct policy
+processes with potentially different agenda-setting dynamics. A
+systematic analysis across all categories would provide a more complete
+picture of how media narration of ESA events relates to the congressional
+policy process.
+
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+\end{document}
